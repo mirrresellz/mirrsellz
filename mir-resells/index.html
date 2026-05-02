@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MirrSellz</title>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+<style>
+body{
+  margin:0;
+  font-family:Arial;
+  background:#000;
+  color:#fff;
+  text-align:center;
+}
+
+/* PAGES */
+.page{display:none;padding:20px;}
+.active{display:block;animation:fadeIn 0.4s ease;}
+
+/* CARDS */
+.card{
+  background:#111;
+  margin:20px auto;
+  padding:20px;
+  border-radius:12px;
+  width:90%;
+  max-width:400px;
+  transform:translateY(30px);
+  opacity:0;
+  animation:fadeUp 0.6s ease forwards;
+}
+
+/* BUTTONS */
+button{
+  padding:10px;
+  margin:8px;
+  border:none;
+  border-radius:8px;
+  background:white;
+  color:black;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+button:hover{
+  transform:scale(1.05);
+}
+
+/* REVIEWS */
+.review{
+  background:#111;
+  margin:10px;
+  padding:10px;
+  border-radius:10px;
+}
+
+/* FLOW ANIMATION */
+.flow-container{
+  overflow:hidden;
+  white-space:nowrap;
+  margin:20px 0;
+}
+
+.flow-track{
+  display:inline-block;
+  animation:flowRight 12s linear infinite;
+}
+
+.flow-item{
+  display:inline-block;
+  margin:0 25px;
+  font-weight:bold;
+}
+
+@keyframes flowRight{
+  0%{transform:translateX(-100%);}
+  100%{transform:translateX(100%);}
+}
+
+/* GLOW TEXT */
+.glow-text{
+  font-weight:bold;
+  display:inline-block;
+  animation:glowJump 2s infinite;
+}
+
+.glow-text:nth-child(1){animation-delay:0s;}
+.glow-text:nth-child(2){animation-delay:0.2s;}
+
+@keyframes glowJump{
+  0%,100%{
+    transform:translateY(0);
+    text-shadow:0 0 5px #fff;
+  }
+  50%{
+    transform:translateY(-6px);
+    text-shadow:0 0 20px #fff;
+  }
+}
+
+.glow-text:hover{
+  transform:scale(1.1);
+}
+
+/* ANIMATIONS */
+@keyframes fadeUp{
+  to{transform:translateY(0);opacity:1;}
+}
+
+@keyframes fadeIn{
+  from{opacity:0;}
+  to{opacity:1;}
+}
+</style>
+</head>
+
+<body>
+
+<!-- HOME -->
+<div id="home" class="page active">
+
+<h1>
+  <span class="glow-text">Mirr</span>
+  <span class="glow-text">Sellz</span>
+</h1>
+
+<div class="flow-container">
+  <div class="flow-track">
+    <span class="flow-item">HOME → SHOP → PRODUCT → CART → CHECKOUT</span>
+    <span class="flow-item">HOME → SHOP → PRODUCT → CART → CHECKOUT</span>
+  </div>
+</div>
+
+<button onclick="go('shop')">Enter Shop</button>
+
+</div>
+
+<!-- SHOP -->
+<div id="shop" class="page">
+<h1>Shop</h1>
+
+<div class="card">
+<h3>Shoe Vendor</h3>
+<button onclick="openProduct('shoe')">View</button>
+<button onclick="addToCart('Shoe Vendor',14.99)">Add</button>
+</div>
+
+<div class="card">
+<h3>Electronics Vendor</h3>
+<button onclick="openProduct('electronics')">View</button>
+<button onclick="addToCart('Electronics Vendor',14.99)">Add</button>
+</div>
+
+<div class="card">
+<h3>Clothing Vendor</h3>
+<button onclick="openProduct('clothing')">View</button>
+<button onclick="addToCart('Clothing Vendor',14.99)">Add</button>
+</div>
+
+<button onclick="go('cart'); loadCart()">Cart</button>
+</div>
+
+<!-- PRODUCT -->
+<div id="product" class="page">
+<h1 id="productTitle"></h1>
+
+<button onclick="addCurrent()">Add to Cart</button>
+<button onclick="go('shop')">Back</button>
+
+<h2>Reviews</h2>
+
+<div>
+<span onclick="setRating(1)">⭐</span>
+<span onclick="setRating(2)">⭐</span>
+<span onclick="setRating(3)">⭐</span>
+<span onclick="setRating(4)">⭐</span>
+<span onclick="setRating(5)">⭐</span>
+</div>
+
+<textarea id="reviewText"></textarea><br>
+<button onclick="submitReview()">Submit</button>
+
+<div id="reviews"></div>
+</div>
+
+<!-- CART -->
+<div id="cart" class="page">
+<h1>Cart</h1>
+
+<div id="cartItems"></div>
+<h2 id="total"></h2>
+
+<button onclick="checkout()">Checkout</button>
+<button onclick="go('shop')">Back</button>
+</div>
+
+<script src="app.js"></script>
+
+</body>
+</html>
